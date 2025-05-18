@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/andy89923/lab4-af/internal/logger"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/logger"
 	"github.com/asaskevich/govalidator"
 	"gopkg.in/yaml.v2"
 )

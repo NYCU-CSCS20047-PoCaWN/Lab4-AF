@@ -7,16 +7,21 @@ import (
 	"sync"
 	"time"
 
-	"github.com/andy89923/lab4-af/internal/logger"
-	"github.com/andy89923/lab4-af/internal/sbi/processor"
-	"github.com/andy89923/lab4-af/pkg/app"
-	"github.com/andy89923/lab4-af/pkg/factory"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/logger"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/sbi/consumer"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/sbi/processor"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/pkg/app"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/pkg/factory"
 	"github.com/gin-gonic/gin"
 )
 
 type nfApp interface {
 	app.App
+
+	Consumer() *consumer.Consumer
 	Processor() *processor.Processor
+
+	CancelContext() context.Context
 }
 
 type Server struct {
@@ -45,6 +50,12 @@ func NewServer(nf nfApp, tlsKeyLogPath string) *Server {
 
 func (s *Server) Run(wg *sync.WaitGroup) {
 	logger.SBILog.Info("Starting server...")
+
+	var err error
+	_, s.Context().NfId, err = s.Consumer().RegisterNFInstance(s.CancelContext())
+	if err != nil {
+		logger.InitLog.Errorf("NWDAF register to NRF Error[%s]", err.Error())
+	}
 
 	wg.Add(1)
 	go func() {
@@ -93,6 +104,13 @@ func (s *Server) serve() error {
 }
 
 func (s *Server) Shutdown() {
+	// deregister with NRF
+	if err := s.Consumer().SendDeregisterNFInstance(); err != nil {
+		logger.SBILog.Errorf("Deregister NF instance Error[%+v]", err)
+	} else {
+		logger.SBILog.Infof("Deregister from NRF successfully")
+	}
+
 	s.shutdownHttpServer()
 }
 

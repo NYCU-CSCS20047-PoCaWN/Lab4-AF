@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/andy89923/lab4-af/internal/logger"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/logger"
 	"github.com/asaskevich/govalidator"
 
 	"github.com/free5gc/openapi/models"
@@ -30,8 +30,10 @@ type Info struct {
 }
 
 type Configuration struct {
-	NfName string `yaml:"nfName,omitempty"`
-	Sbi    *Sbi   `yaml:"sbi"`
+	NfName     string `yaml:"nfName,omitempty"`
+	Sbi        *Sbi   `yaml:"sbi"`
+	NrfUri     string `yaml:"nrfUri" valid:"url,required"`
+	NrfCertPem string `yaml:"nrfCertPem,omitempty" valid:"optional"`
 }
 
 type Logger struct {
@@ -41,10 +43,11 @@ type Logger struct {
 }
 
 type Sbi struct {
-	Scheme      models.UriScheme `yaml:"scheme"`
-	BindingIPv4 string           `yaml:"bindingIPv4,omitempty" valid:"host,required"`
-	Port        int              `yaml:"port"`
-	Tls         *Tls             `yaml:"tls,omitempty" valid:"optional"`
+	Scheme       models.UriScheme `yaml:"scheme"`
+	BindingIPv4  string           `yaml:"bindingIPv4,omitempty" valid:"host,required"`
+	RegisterIPv4 string           `yaml:"registerIPv4,omitempty" valid:"host,optional"`
+	Port         int              `yaml:"port"`
+	Tls          *Tls             `yaml:"tls,omitempty" valid:"optional"`
 }
 
 type Tls struct {
@@ -102,7 +105,7 @@ func appendInvalid(err error) error {
 
 	es := err.(govalidator.Errors).Errors()
 	for _, e := range es {
-		errs = append(errs, fmt.Errorf("Invalid %w", e))
+		errs = append(errs, fmt.Errorf("invalid %w", e))
 	}
 
 	return error(errs)

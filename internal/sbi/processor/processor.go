@@ -1,6 +1,6 @@
 package processor
 
-import "github.com/andy89923/lab4-af/pkg/app"
+import "github.com/NYCU-CSCS20047-PoCaWN/lab4-af/pkg/app"
 
 type ProcessorNf interface {
 	app.App

@@ -6,11 +6,14 @@ configuration:
   nfName: NF # the name of this NF
   sbi: # Service-based interface information
     scheme: http # the protocol for sbi (http or https)
-    bindingIPv4: 127.0.0.163  # IP used to bind the service
+    bindingIPv4: af.free5gc.org # IP used to bind the service
+    registerIPv4: af.free5gc.org # IP used to register the service
     port: 8000 # Port used to bind the service
     tls: # the local path of TLS key
       pem: cert/nf.pem # NF TLS Certificate
       key: cert/nf.key # NF TLS Private key
+  nrfUri: http://nrf.free5gc.org:8000 # NRF URI
+  nrfCertPem: cert/nrf.pem       # NRF Certificate
 
 logger: # log output setting
   enable: true # true or false

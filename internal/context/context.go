@@ -1,22 +1,31 @@
 package context
 
 import (
+	"fmt"
 	"os"
 
-	"github.com/andy89923/lab4-af/internal/logger"
-	"github.com/andy89923/lab4-af/pkg/factory"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/logger"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/pkg/factory"
 	"github.com/google/uuid"
 
 	"github.com/free5gc/openapi/models"
 )
 
 type NFContext struct {
-	NfId        string
-	Name        string
-	UriScheme   models.UriScheme
-	BindingIPv4 string
-	SBIPort     int
+	NfId         string
+	NfProfile    *models.NrfNfManagementNfProfile
+	Name         string
+	UriScheme    models.UriScheme
+	BindingIPv4  string
+	RegisterIPv4 string
+	SBIPort      int
 
+	NrfUri         string
+	NrfCertPem     string
+	IsRegistered   bool
+	OAuth2Required bool
+
+	// AF Data
 	SpyFamilyData map[string]string
 }
 
@@ -40,6 +49,18 @@ func InitNfContext() {
 			nfContext.BindingIPv4 = "0.0.0.0"
 		}
 	}
+	nfContext.RegisterIPv4 = cfg.Configuration.Sbi.RegisterIPv4
+	nfContext.IsRegistered = false
+
+	if cfg.Configuration.NrfUri != "" {
+		nfContext.NrfUri = cfg.Configuration.NrfUri
+	} else {
+		logger.CfgLog.Warn("NRF Uri is empty! Using localhost as NRF IPv4 address.")
+		nfContext.NrfUri = fmt.Sprintf("%s://%s:%d", nfContext.UriScheme, "127.0.0.1", 29510)
+	}
+	nfContext.NrfCertPem = cfg.Configuration.NrfCertPem
+
+	// AF Data
 	nfContext.SpyFamilyData = map[string]string{
 		"Loid":   "Forger",
 		"Anya":   "Forger",
@@ -47,15 +68,19 @@ func InitNfContext() {
 		"Bond":   "Forger",
 		"Becky":  "Blackbell",
 		"Damian": "Desmond",
-		"Franky": "Franklin",
-		"Fiona":  "Frost",
-		"Sylvia": "Sherwood",
-		"Yuri":   "Briar",
-		"Millie": "Manis",
-		"Ewen":   "Egeburg",
-		"Emile":  "Elman",
-		"Henry":  "Henderson",
-		"Martha": "Marriott",
+	}
+}
+
+func (c *NFContext) BuildNfProfile() {
+	c.NfProfile = &models.NrfNfManagementNfProfile{
+		NfInstanceId:  c.NfId,
+		NfType:        models.NrfNfManagementNfType_AF,
+		NfStatus:      models.NrfNfManagementNfStatus_REGISTERED,
+		Ipv4Addresses: []string{c.RegisterIPv4},
+		NfServices:    []models.NrfNfManagementNfService{},
+		CustomInfo: map[string]interface{}{
+			"AfType": "Sample AF",
+		},
 	}
 }
 

@@ -1,8 +1,8 @@
 package app
 
 import (
-	nf_context "github.com/andy89923/lab4-af/internal/context"
-	"github.com/andy89923/lab4-af/pkg/factory"
+	nf_context "github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/context"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/pkg/factory"
 )
 
 type App interface {

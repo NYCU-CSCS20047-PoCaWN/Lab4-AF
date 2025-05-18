@@ -7,12 +7,13 @@ import (
 	"runtime/debug"
 	"sync"
 
-	nf_context "github.com/andy89923/lab4-af/internal/context"
-	"github.com/andy89923/lab4-af/internal/logger"
-	"github.com/andy89923/lab4-af/internal/sbi"
-	"github.com/andy89923/lab4-af/internal/sbi/processor"
-	"github.com/andy89923/lab4-af/pkg/app"
-	"github.com/andy89923/lab4-af/pkg/factory"
+	nf_context "github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/context"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/logger"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/sbi"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/sbi/consumer"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/sbi/processor"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/pkg/app"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/pkg/factory"
 	"github.com/sirupsen/logrus"
 )
 
@@ -26,6 +27,7 @@ type NfApp struct {
 
 	sbiServer *sbi.Server
 	processor *processor.Processor
+	consumer  *consumer.Consumer
 }
 
 var _ app.App = &NfApp{}
@@ -54,6 +56,12 @@ func NewApp(ctx context.Context, cfg *factory.Config, tlsKeyLogPath string) (*Nf
 	}
 	nf.processor = processor
 
+	consumer, errConsumer := consumer.NewConsumer(nf)
+	if errConsumer != nil {
+		return nf, errConsumer
+	}
+	nf.consumer = consumer
+
 	return nf, nil
 }
 
@@ -67,6 +75,14 @@ func (a *NfApp) Context() *nf_context.NFContext {
 
 func (a *NfApp) Processor() *processor.Processor {
 	return a.processor
+}
+
+func (a *NfApp) Consumer() *consumer.Consumer {
+	return a.consumer
+}
+
+func (a *NfApp) CancelContext() context.Context {
+	return a.ctx
 }
 
 func (a *NfApp) SetLogEnable(enable bool) {
