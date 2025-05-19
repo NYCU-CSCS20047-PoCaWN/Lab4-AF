@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 # Install Golangci-lint 
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /usr/local/bin
 
-RUN apt-get update && apt-get install -y net-tools iputils-ping curl tcpdump
+RUN apt-get update && apt-get install -y net-tools iputils-ping curl tcpdump jq
 
 
 WORKDIR /workspace
