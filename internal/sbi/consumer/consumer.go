@@ -1,6 +1,9 @@
 package consumer
 
 import (
+	"crypto/tls"
+	"net/http"
+
 	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/pkg/app"
 
 	Nnrf_NFDiscovery "github.com/free5gc/openapi/nrf/NFDiscovery"
@@ -31,6 +34,11 @@ func NewConsumer(af ConsumerAf) (*Consumer, error) {
 
 	c.webuiService = &webuiService{
 		consumer: c,
+		httpsClient: &http.Client{
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			},
+		},
 	}
 	return c, nil
 }

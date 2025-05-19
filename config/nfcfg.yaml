@@ -10,11 +10,14 @@ configuration:
     registerIPv4: af.free5gc.org # IP used to register the service
     port: 8000 # Port used to bind the service
     tls: # the local path of TLS key
-      pem: cert/nf.pem # NF TLS Certificate
-      key: cert/nf.key # NF TLS Private key
+      pem: cert/af.pem # NF TLS Certificate
+      key: cert/af.key # NF TLS Private key
   nrfUri: http://nrf.free5gc.org:8000 # NRF URI
   nrfCertPem: cert/nrf.pem            # NRF Certificate
-  webUri: http://webui.free5gc.org:5000 
+  # webUri: http://webui.free5gc.org:5000 
+
+  # For testing, localhost is used
+  webUri: http://af.free5gc.org:8000/oam
 
   # Gatekeeper configuration
   gateKeeper:
