@@ -7,7 +7,7 @@ import (
 	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/logger"
 	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/pkg/app"
 	"github.com/gin-gonic/gin"
-	
+
 	"github.com/free5gc/util/httpwrapper"
 	logger_util "github.com/free5gc/util/logger"
 )
@@ -44,6 +44,9 @@ func newRouter(s *Server) *gin.Engine {
 
 	spyFamilyGroup := router.Group("/spyfamily")
 	applyRoutes(spyFamilyGroup, s.getSpyFamilyRoute())
+
+	oamGroup := router.Group("/oam")
+	applyRoutes(oamGroup, s.getOAMRoute())
 
 	return router
 }

@@ -25,15 +25,27 @@ type Config struct {
 }
 
 type Info struct {
-	Version     string `yaml:"version" valid:"required,in(1.0.0)"`
+	Version     string `yaml:"version" valid:"required,in(1.0.1)"`
 	Description string `yaml:"description,omitempty" valid:"type(string)"`
 }
 
 type Configuration struct {
-	NfName     string `yaml:"nfName,omitempty"`
-	Sbi        *Sbi   `yaml:"sbi"`
-	NrfUri     string `yaml:"nrfUri" valid:"url,required"`
-	NrfCertPem string `yaml:"nrfCertPem,omitempty" valid:"optional"`
+	NfName     string      `yaml:"nfName,omitempty"`
+	Sbi        *Sbi        `yaml:"sbi"`
+	NrfUri     string      `yaml:"nrfUri" valid:"url,required"`
+	NrfCertPem string      `yaml:"nrfCertPem,omitempty" valid:"optional"`
+	WebUri     string      `yaml:"webUri,omitempty" valid:"url,optional"`
+	GateKeeper *GateKeeper `yaml:"gateKeeper,omitempty" valid:"optional"`
+}
+
+type GateKeeper struct {
+	Enable  bool     `yaml:"enable" valid:"type(bool)"`
+	Servers []Server `yaml:"servers" valid:"required"`
+}
+
+type Server struct {
+	Name string `yaml:"name" valid:"required"`
+	Addr string `yaml:"addr" valid:"host,required"`
 }
 
 type Logger struct {

@@ -15,6 +15,7 @@ type Consumer struct {
 	ConsumerAf
 
 	*nnrfService
+	*webuiService
 }
 
 func NewConsumer(af ConsumerAf) (*Consumer, error) {
@@ -26,6 +27,10 @@ func NewConsumer(af ConsumerAf) (*Consumer, error) {
 		consumer:        c,
 		nfMngmntClients: make(map[string]*Nnrf_NFManagement.APIClient),
 		nfDiscClients:   make(map[string]*Nnrf_NFDiscovery.APIClient),
+	}
+
+	c.webuiService = &webuiService{
+		consumer: c,
 	}
 	return c, nil
 }

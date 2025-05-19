@@ -1,5 +1,5 @@
 info:
-  version: 1.0.0
+  version: 1.0.1
   description: NF initial local configuration
 
 configuration:
@@ -13,7 +13,18 @@ configuration:
       pem: cert/nf.pem # NF TLS Certificate
       key: cert/nf.key # NF TLS Private key
   nrfUri: http://nrf.free5gc.org:8000 # NRF URI
-  nrfCertPem: cert/nrf.pem       # NRF Certificate
+  nrfCertPem: cert/nrf.pem            # NRF Certificate
+  webUri: http://webui.free5gc.org:5000 
+
+  # Gatekeeper configuration
+  gateKeeper:
+    enable: true # true or false
+    servers: # Gatekeeper server list
+      - name: CKSH
+        addr: 120.112.1.36
+      - name: Google
+        addr: 8.8.8.8
+
 
 logger: # log output setting
   enable: true # true or false
