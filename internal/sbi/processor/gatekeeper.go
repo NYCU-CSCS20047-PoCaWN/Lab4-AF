@@ -3,6 +3,7 @@ package processor
 import (
 	"context"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -19,7 +20,10 @@ func (p *Processor) GetWarningUsers(c *gin.Context) {
 		return
 	}
 
-	var warningUsers []models.WarningUser
+	gateWarn := models.GatekeeperWarning{
+		WarningTime: time.Now(), // Current time
+	}
+	var tmpWarningList []models.WarningUser
 
 	// TODO: Implement logic to determine warning users based on userUsage
 	// Use userUsage to get warning users
@@ -29,5 +33,9 @@ func (p *Processor) GetWarningUsers(c *gin.Context) {
 		logger.ProcessorLog.Errorf("Debug: %v", usage)
 	}
 
-	c.JSON(http.StatusOK, warningUsers)
+	// You may remove the following code if the logic above is implemented
+	gateWarn.WarningList = tmpWarningList
+	gateWarn.WarningCnt = int64(len(gateWarn.WarningList))
+
+	c.JSON(http.StatusOK, gateWarn)
 }

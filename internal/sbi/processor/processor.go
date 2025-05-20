@@ -23,6 +23,7 @@ type Processor struct {
 	ProcessorNf
 
 	// Gatekeeper Configurations
+	// TODO: You may need to add more data structures to support Gatekeeper features
 	Servers []Server
 }
 
