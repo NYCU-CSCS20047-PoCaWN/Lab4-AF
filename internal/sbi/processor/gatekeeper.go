@@ -2,8 +2,12 @@ package processor
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/logger"
+	"github.com/NYCU-CSCS20047-PoCaWN/lab4-af/internal/models"
 )
 
 func (p *Processor) GetWarningUsers(c *gin.Context) {
@@ -15,10 +19,15 @@ func (p *Processor) GetWarningUsers(c *gin.Context) {
 		return
 	}
 
+	var warningUsers []models.WarningUser
+
 	// TODO: Implement logic to determine warning users based on userUsage
 	// Use userUsage to get warning users
 	// For now, just return the userUsage as a placeholder
-	c.JSON(200, gin.H{
-		"warning_users": userUsage,
-	})
+	for _, usage := range userUsage {
+		// Check if the user is a warning user
+		logger.ProcessorLog.Errorf("Debug: %v", usage)
+	}
+
+	c.JSON(http.StatusOK, warningUsers)
 }

@@ -14,19 +14,21 @@ configuration:
       key: cert/af.key # NF TLS Private key
   nrfUri: http://nrf.free5gc.org:8000 # NRF URI
   nrfCertPem: cert/nrf.pem            # NRF Certificate
-  # webUri: http://webui.free5gc.org:5000 
+  webUri: http://webui.free5gc.org:5000 
 
   # For testing, localhost is used
-  webUri: http://af.free5gc.org:8000/oam
+  # webUri: http://af.free5gc.org:8000/oam
 
   # Gatekeeper configuration
   gateKeeper:
     enable: true # true or false
-    servers: # Gatekeeper server list
-      - name: CKSH
+    servers: # Gatekeeper server list (Bad servers)
+      - name: CKSH.TP.EDU.TW
         addr: 120.112.1.36
       - name: Google
         addr: 8.8.8.8
+      - name: dns101
+        addr: 101.101.101.101
 
 
 logger: # log output setting

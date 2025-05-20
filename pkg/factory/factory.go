@@ -11,7 +11,6 @@ import (
 
 var NfConfig *Config
 
-// TODO: Support configuration update from REST api
 func InitConfigFactory(f string, cfg *Config) error {
 	if f == "" {
 		// Use default config path
